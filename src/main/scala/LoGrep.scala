@@ -7,12 +7,13 @@ import io.TextFile
 
 object LoGrep {
 
-	val anyThing = ".*".r
+  val anyThing = ".*".r
   val newLine = "(^\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}.*)".r
   val ignoreLine = "(^\\s*\\t*\\r*)".r
 
   def isFile(file: File, wildCard: String) =
-  	(file.isFile() && file.getName().matches(wildCard)/* && Files.probeContentType(file.toPath) == "text/plain"*/)
+    (file.isFile() && file.getName().matches(wildCard) /* && Files.probeContentType(file.toPath) == "text/plain"*/ )
+
   /**
    * Converts a File or a Directory to a List[File]
    *
@@ -21,7 +22,8 @@ object LoGrep {
   def fileListAdapter(file: File, wildCard: String): List[File] = {
     if (file.exists()) {
       if (file.isDirectory())
-        file.listFiles()
+        file
+          .listFiles()
           .foldLeft(Nil: List[File])((acc, f) => fileListAdapter(f, wildCard) ::: acc) // recursion by default
       else if (isFile(file, wildCard)) List(file)
       else Nil
@@ -31,21 +33,24 @@ object LoGrep {
   }
 
   def assembleWildCard(wildCard: String): String =
-  	wildCard.split('*')
-  		.map(x => if (x.isEmpty) "(.*)" else "(" + x + ")")
-  		.mkString("(.*)")
+    wildCard.split('*')
+      .map(x => if (x.isEmpty) "(.*)" else "(" + x + ")")
+      .mkString("(.*)")
 
   def assemblePath(list: List[String]) =
-  	if (list.isEmpty || list.head.isEmpty) "./"
-  	else list.foldLeft("")((acc, s) => s + '/' + acc)
+    if (list.isEmpty || list.head.isEmpty) "./"
+    else list.foldLeft("")((acc, s) => s + '/' + acc)
 
-  // TODO: handle filepat wildcards
+  /**
+   * 	If the file pattern (`pat`) contains a wildcard this method will form
+   * a valid regex string to search file names for matches
+   */
   def normalizeFilePattern(pat: String): List[File] = {
-  	if (pat.contains('*')) {
-  		val paths = pat.split(Array('\\', '/')).toList.reverse
-  		fileListAdapter(new File(assemblePath(paths.tail)),
-  			assembleWildCard(paths.head))
-  	} else fileListAdapter(new File(pat), "(.*)")
+    if (pat.contains('*')) {
+      val paths = pat.split(Array('\\', '/')).toList.reverse
+      fileListAdapter(new File(assemblePath(paths.tail)),
+        assembleWildCard(paths.head))
+    } else fileListAdapter(new File(pat), "(.*)")
   }
 
   /**
@@ -66,16 +71,12 @@ object LoGrep {
   }
 
   /**
-   *
+   * 	With a filePattern get a list of files that match the criteria
+   * 	parse each file applying a stdout function if file contents match searchTerm
    */
   def processFiles(term: Regex = anyThing, filePat: String = "."): Unit = {
     val func = parseFile(term) _
-    def inner(list: List[File]): Unit = list match {
-      case head :: Nil => func(head)
-      case head :: tail => func(head); inner(tail);
-      case _ => {} // do nothing on an empty list of files
-    }
-    inner(normalizeFilePattern(filePat))
+    normalizeFilePattern(filePat) foreach func
   }
 
   /**
