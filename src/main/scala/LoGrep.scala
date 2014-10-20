@@ -6,16 +6,16 @@ import java.io.FileNotFoundException
 import io.TextFile
 
 object LoGrep {
-
   val anyThing = ".*".r
   val newLine = "(^\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}.*)".r
   val ignoreLine = "(^\\s*\\t*\\r*)".r
 
+  /* helper function to help with file detection */
   def isFile(file: File, wildCard: String) =
     (file.isFile() && file.getName().matches(wildCard) /* && Files.probeContentType(file.toPath) == "text/plain"*/ )
 
   /**
-   * Converts a File or a Directory to a List[File]
+   * Converts a File or a Directory to a List[File] recursively
    *
    * TODO: handle filter out non 'text/plain' formats
    */
@@ -32,11 +32,17 @@ object LoGrep {
     }
   }
 
+  /**
+   * 	With a wildcard, make a well-formed regex compatible string for filename matching
+   */
   def assembleWildCard(wildCard: String): String =
     wildCard.split('*')
       .map(x => if (x.isEmpty) "(.*)" else "(" + x + ")")
       .mkString("(.*)")
 
+   /**
+   * 	Take a list of strings that were split from a path and reassemble the path neatly
+   */
   def assemblePath(list: List[String]) =
     if (list.isEmpty || list.head.isEmpty) "./"
     else list.foldLeft("")((acc, s) => s + '/' + acc)
@@ -91,5 +97,4 @@ object LoGrep {
       case _ => processFiles(args(0).r, args(1))
     }
   }
-
 }
