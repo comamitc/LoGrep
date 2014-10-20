@@ -53,7 +53,7 @@ sealed trait FileOps {
  * @param newline
  * @param comment
  */
-sealed class TxtFile[A](filename: java.io.File, newline: Regex, comment: Regex) extends FileOps {
+sealed class TextFile[A](filename: java.io.File, newline: Regex, comment: Regex) extends FileOps {
 
   /** Private value that extracts `\?n` delimited lines from a file. */
   val ctx: Iterator[String] = this.open(filename).getLines
