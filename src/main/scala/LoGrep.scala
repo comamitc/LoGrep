@@ -55,10 +55,7 @@ object LoGrep {
     val func = parseFile(term) _
     def inner(list: List[File]): Unit = list match {
       case head :: Nil => func(head)
-      case head :: tail => {
-        func(head)
-        inner(tail)
-      }
+      case head :: tail => func(head);inner(tail);
       case Nil => throw new Exception("Unknown state for processor.")
     }
     inner(fileListAdapter(new File(filePat)))
