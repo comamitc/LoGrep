@@ -9,6 +9,13 @@ object LoGrep {
   val newLine = "(^\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}.*)".r
   val ignoreLine = "(^\\s*\\t*\\r*)".r
 
+  /* TODO: handle filepat wildcards
+	def filesWithWildcard(filePat: String) = {
+  	if (filePat.contains('*')) {
+
+  	} else new File(filePat)
+  }*/
+
   /**
    * Converts a File or a Directory to a List[File]
    *
@@ -16,7 +23,7 @@ object LoGrep {
    */
   def fileListAdapter(file: File): List[File] = {
     if (file.exists()) {
-      if (file.isDirectory()) file.listFiles().toList()
+      if (file.isDirectory()) file.listFiles().toList
       else if (file.isFile()) List(file)
       else throw new Exception("System type unknown for: " + file.getPath())
     } else {
@@ -33,22 +40,23 @@ object LoGrep {
   }
 
   /**
-  *	 Using a Regex search and a File iterate and find all
-  */
-  def parseFile(term: Regex, f: File): Unit = {
-    val func = printMatchedString(term)
-    new TextFile(f.getCononicalPath, newLine, ignoreLine)
-    	.getLines(func)
+   * 	 Using a Regex search and a File iterate and find all
+   */
+  def parseFile(term: Regex)(f: File): Unit = {
+    val func = printMatchedString(term) _
+    new TextFile(f.getCanonicalPath, newLine, ignoreLine)
+      .getLines(func)
   }
 
   /**
    *
    */
   def processFiles(term: Regex = ".*".r, filePat: String = "."): Unit = {
+    val func = parseFile(term) _
     def inner(list: List[File]): Unit = list match {
-      case head :: Nil => parseFile(f)
+      case head :: Nil => func(head)
       case head :: tail => {
-        parseFile(head)
+        func(head)
         inner(tail)
       }
       case Nil => throw new Exception("Unknown state for processor.")
@@ -57,10 +65,10 @@ object LoGrep {
   }
 
   /**
-  * Entry point for the program
-  *
-  * TODO: case insensitive, recursive directory
-  */
+   * Entry point for the program
+   *
+   * TODO: case insensitive, recursive directory
+   */
   def main(args: Array[String]): Unit = {
     args.size match {
       case 0 => processFiles()
