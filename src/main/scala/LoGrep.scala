@@ -15,8 +15,8 @@ object LoGrep {
   /**
    * 	 Function passed to TextFile for each line to process
    */
-  def printMatchedString(term: Regex)(line: String): Unit = term findFirstIn line match {
-    case Some(str) => println(line)
+  def printMatchedString(term: Regex)(line: String): String = term findFirstIn line match {
+    case Some(str) => line
     case None => {} // do nothing
   }
 
@@ -25,7 +25,7 @@ object LoGrep {
    */
   def parseFile(term: Regex)(f: File): Unit = {
     val func = printMatchedString(term) _
-    new TextFile(f.getAbsolutePath, newLine, ignoreLine)
+    val matchingLines: List[String] = new TextFile(f.getAbsolutePath, newLine, ignoreLine)
       .getLines(func)
   }
 
