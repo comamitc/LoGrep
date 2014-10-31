@@ -8,7 +8,7 @@ logrep is a log keyphrase searching utility. Because logs naturally have some li
 Running the command is as easy as this:
 
 ```sh
-run ERROR *.log
+./logrep.sh ERROR *.log
 ```
 
 The above command will search all files in the current directory for the keyword ERROR and print them to standard out.  This can be redirected to a file via native piping.
