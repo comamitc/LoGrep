@@ -2,61 +2,15 @@ import scala.util.matching.Regex
 import java.io.File
 import java.io.FileNotFoundException
 
-import io.TextFile
+import uniform.io.TextFile
+import uniform.sys.FileSystem
+import uniform.config.UniformConfig
 
 object LoGrep {
+
   val anyThing = ".*".r
-  val newLine = "(^\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}.*)".r
-  val ignoreLine = "(^\\s*\\t*\\r*)".r
-
-  /* helper function to help with file detection */
-  def isFile(file: File, wildCard: String) =
-    (file.isFile() && file.getName().matches(wildCard) /* && Files.probeContentType(file.toPath) == "text/plain"*/ )
-
-  /**
-   * Converts a File or a Directory to a List[File] recursively
-   *
-   * TODO: handle filter out non 'text/plain' formats
-   */
-  def fileListAdapter(file: File, wildCard: String): List[File] = {
-    if (file.exists()) {
-      if (file.isDirectory())
-        file
-          .listFiles()
-          .foldLeft(Nil: List[File])((acc, f) => fileListAdapter(f, wildCard) ::: acc) // recursion by default
-      else if (isFile(file, wildCard)) List(file)
-      else Nil
-    } else {
-      throw new FileNotFoundException(file.getPath() + " not found")
-    }
-  }
-
-  /**
-   * 	With a wildcard, make a well-formed regex compatible string for filename matching
-   */
-  def assembleWildCard(wildCard: String): String =
-    wildCard.split('*')
-      .map(x => if (x.isEmpty) "(.*)" else "(" + x + ")")
-      .mkString("(.*)")
-
-   /**
-   * 	Take a list of strings that were split from a path and reassemble the path neatly
-   */
-  def assemblePath(list: List[String]) =
-    if (list.isEmpty || list.head.isEmpty) "./"
-    else list.foldLeft("")((acc, s) => s + '/' + acc)
-
-  /**
-   * 	If the file pattern (`pat`) contains a wildcard this method will form
-   * a valid regex string to search file names for matches
-   */
-  def normalizeFilePattern(pat: String): List[File] = {
-    if (pat.contains('*')) {
-      val paths = pat.split(Array('\\', '/')).toList.reverse
-      fileListAdapter(new File(assemblePath(paths.tail)),
-        assembleWildCard(paths.head))
-    } else fileListAdapter(new File(pat), "(.*)")
-  }
+  private val newLine = UniformConfig.get("new_line").r
+  private val ignoreLine = UniformConfig.get("ignore_line").r
 
   /**
    * 	 Function passed to TextFile for each line to process
@@ -81,7 +35,8 @@ object LoGrep {
    */
   def processFiles(term: Regex = anyThing, filePat: String = "."): Unit = {
     val func = parseFile(term) _
-    normalizeFilePattern(filePat) foreach func
+    val fs = new FileSystem(filePat)
+    fs.listFiles foreach func
   }
 
   /**
