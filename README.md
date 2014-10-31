@@ -3,6 +3,11 @@ LoGrep
 
 logrep is a log keyphrase searching utility. Because logs naturally have some line content scattered with newlines (`\n`) for example in stacktraces, logrep concatenates those into one `String` object to provide context to the keyword.
 
+###Prerequisites
+
+jre 1.7+
+java in you environment path (windows)
+
 ###Use
 
 Running the command is as easy as this:
