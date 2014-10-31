@@ -12,7 +12,7 @@ object LoGrep {
   private val newLine = UniformConfig.get("new_line").r
   private val ignoreLine = UniformConfig.get("ignore_line").r
 
-  def sortLines(a: Line, b: Line) = (a.date).compareTo(a.date) < 0
+  def sortLines(a: Line, b: Line) = (a.date).compareTo(b.date) < 0
 
   /**
    * 	 Function passed to TextFile for each line to process
@@ -25,11 +25,10 @@ object LoGrep {
   /**
    * 	 Using a Regex search and a File iterate and find all
    */
-  def parseFile(term: Regex)(f: File): Unit = {
+  def parseFile(term: Regex)(f: File): List[Line] = {
     val func = printMatchedString(term) _
-    val matchingLines: List[Line] = new TextFile(f.getAbsolutePath, newLine, ignoreLine)
+    new TextFile(f.getAbsolutePath, newLine, ignoreLine)
       .getLines(func)
-    matchingLines.filter(_ != NoLine).sortWith(sortLines) foreach println
   }
 
   /**
@@ -39,7 +38,13 @@ object LoGrep {
   def processFiles(term: Regex = anyThing, filePat: String = "."): Unit = {
     val func = parseFile(term) _
     val fs = new FileSystem(filePat)
-    fs.listFiles foreach func
+    val files = fs.listFiles
+
+   (fs.listFiles map func)
+      .flatten
+      .filter(_ != NoLine)
+      .sortWith(sortLines)
+      .foreach(println)
   }
 
   /**
