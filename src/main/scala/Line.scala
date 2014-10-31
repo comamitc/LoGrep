@@ -1,7 +1,15 @@
 import com.github.nscala_time.time.Imports.DateTime
 import com.github.nscala_time.time.Imports.DateTimeFormat
 
-case class Line(line: String) {
+trait Line {
+	val date: DateTime
+}
+
+case object NoLine extends Line {
+	val date: DateTime = null
+}
+
+case class LogLine(line: String) extends Line {
 
 	val fromFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 

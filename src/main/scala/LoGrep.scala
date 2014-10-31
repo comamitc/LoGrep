@@ -12,12 +12,14 @@ object LoGrep {
   private val newLine = UniformConfig.get("new_line").r
   private val ignoreLine = UniformConfig.get("ignore_line").r
 
+  def sortLines(a: Line, b: Line) = (a.date).compareTo(a.date) < 0
+
   /**
    * 	 Function passed to TextFile for each line to process
    */
-  def printMatchedString(term: Regex)(line: String): String = term findFirstIn line match {
-    case Some(str) => line
-    case None => {} // do nothing
+  def printMatchedString(term: Regex)(line: String): Line = term findFirstIn line match {
+    case Some(str) => new LogLine(line)
+    case None => NoLine
   }
 
   /**
@@ -25,8 +27,9 @@ object LoGrep {
    */
   def parseFile(term: Regex)(f: File): Unit = {
     val func = printMatchedString(term) _
-    val matchingLines: List[String] = new TextFile(f.getAbsolutePath, newLine, ignoreLine)
+    val matchingLines: List[Line] = new TextFile(f.getAbsolutePath, newLine, ignoreLine)
       .getLines(func)
+    matchingLines.filter(_ != NoLine).sortWith(sortLines) foreach println
   }
 
   /**
