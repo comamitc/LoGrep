@@ -10,7 +10,7 @@ java in you environment path (windows)
 
 ###Use
 
-Configuration for LoGrep is inline with (and dependent on) the configuration needed for my other library: [https://github.com/comamitc/uniform/blob/master/readme.md](uniform)
+Configuration for LoGrep is inline with (and dependent on) the configuration needed for my other library: [uniform](https://github.com/comamitc/uniform/blob/master/readme.md)
 
 Running the command is as easy as this:
 
