@@ -40,8 +40,10 @@ object LoGrep {
     val fs = new FileSystem(filePat)
     val files = fs.listFiles
 
-   (fs.listFiles map func)
-      .flatten
+    fs.listFiles
+      .foldLeft(List[Line]())((acc, file) => {
+        func(file) ::: acc
+      })
       .filter(_ != NoLine)
       .sortWith(sortLines)
       .foreach(println)
