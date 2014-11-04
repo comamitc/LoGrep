@@ -17,8 +17,12 @@ object LoGrep {
   /**
    * 	 Function passed to TextFile for each line to process
    */
-  def printMatchedString(term: Regex)(line: String): Line = term findFirstIn line match {
-    case Some(str) => new LogLine(line)
+  def printMatchedString(term: Regex, lastScan: Long)(line: String): Line = term findFirstIn line match {
+    case Some(str) => {
+      val l = new LogLine(line)
+      if (lastScan < l.date.getMillis) l
+      else NoLine
+    }
     case None => NoLine
   }
 
@@ -26,9 +30,14 @@ object LoGrep {
    * 	 Using a Regex search and a File iterate and find all
    */
   def parseFile(term: Regex)(f: File): List[Line] = {
-    val func = printMatchedString(term) _
-    new TextFile(f.getAbsolutePath, newLine, ignoreLine)
+    val filePath = f.getAbsolutePath
+    val func = printMatchedString(term, LastScan.get(filePath)) _
+    val lines = new TextFile(filePath, newLine, ignoreLine)
       .getLines(func)
+    println(lines.head.date.getMillis)
+    LastScan.put(filePath,
+      lines.maxBy(_.date.getMillis).date.getMillis)
+    lines
   }
 
   /**

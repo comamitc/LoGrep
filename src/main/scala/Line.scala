@@ -8,7 +8,7 @@ trait Line {
 }
 
 case object NoLine extends Line {
-  val date: DateTime = null
+  val date: DateTime = new DateTime(0)
 }
 
 case class LogLine(line: String) extends Line {

@@ -1,7 +1,0 @@
-2014-10-09 17:46:57,708  INFO [http-bio-8080-exec-15] (org.apache.catalina.core.ApplicationContext) - 42dae765-b7a2-4507-8f56-0562144e9e86 | unknown | normal myclass.ERROR.yo
-2014-10-09 17:46:58,720 ERROR [http-bio-8080-exec-15] (org.apache.catalina.core.ApplicationContext) - 42dae765-b7a2-4507-8f56-0562144e9e86 | admin | com.prosrm.common.OperationFailedException: The specified body id does not exist: listalluser
-	at com.prosrm.ui.web.engine.processors.commands.PageRequestBodyGetterPolicy.getBodyDef(PageRequestBodyGetterPolicy.java:416)
-	at com.prosrm.ui.web.engine.processors.commands.PageRequestBodyGetterPolicy.<init>(PageRequestBodyGetterPolicy.java:177)
-	at com.prosrm.ui.web.engine.processors.PageRequestHandler.getBodyPolicy(PageRequestHandler.java:622)
-	at com.prosrm.ui.web.engine.processors.PageRequestHandler.handleShowPage(PageRequestHandler.java:221)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
