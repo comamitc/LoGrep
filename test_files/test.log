@@ -1,0 +1,21 @@
+2013-04-15 16:35:22,782  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - Servlet PPSS
+Request: callSend
+Session: B8E8BA3A7AED13D08FD7E31DDFCF4574
+User: NA\ORCUTTK
+2013-04-15 16:35:22,782  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - [NA\ORCUTTK]
+Call Method: com.prosrm.ui.web.context.ContextItemRequestHandler.getSiblings()
+2013-04-15 16:35:22,782  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - CheckpointBuffer for control = callSend, session = B8E8BA3A7AED13D08FD7E31DDFCF4574, elapsed (msec) --> 0
+2013-04-15 16:35:38,195  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - Servlet PPSS
+Request: callSend
+Session: B8E8BA3A7AED13D08FD7E31DDFCF4574
+User: NA\ORCUTTK
+2013-04-15 16:35:38,195  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - [NA\ORCUTTK]
+Call Method: com.prosrm.ui.web.engine.processors.PageRequestHandler.handleShowPage()
+2013-04-15 16:35:38,195  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - ShowPage - B8E8BA3A7AED13D08FD7E31DDFCF4574 / NA\ORCUTTK / SD_AM_TGT_DASH
+2013-04-15 16:35:38,211  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - CheckpointBuffer for control = callSend, session = B8E8BA3A7AED13D08FD7E31DDFCF4574, elapsed (msec) --> 16
+2013-04-15 16:35:38,788  INFO [TP-Processor35] (org.apache.catalina.core.ApplicationContext) - Servlet PPSS
+AMF Request: getFullView
+Class: com.prosrm.configurator.viewcfg.impl.ViewConfigFacade
+Method: getFullView
+Session: B8E8BA3A7AED13D08FD7E31DDFCF4574
+User: NA\ORCUTTK
