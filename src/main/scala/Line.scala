@@ -19,4 +19,7 @@ case class LogLine(line: String) extends Line {
   def fromTomcat(t: String): DateTime = fromFormat.parseDateTime(t)
 
   val date = fromTomcat(line.slice(0, 19))
+
+  override def toString() = line + "\n"
+
 }

@@ -15,7 +15,7 @@ Configuration for LoGrep is inline with (and dependent on) the configuration nee
 Running the command is as easy as this:
 
 ```sh
-./logrep.sh ERROR *.log
+./logrep.sh "\s+ERROR\s+" *.log > error.txt
 ```
 
 The above command will search all files in the current directory recursively for files matching the pattern "*.log" and look for the keyword ERROR. It will print to stdout matching log lines in chronological order.  This can be redirected to a file via native piping.
