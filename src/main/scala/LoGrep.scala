@@ -12,6 +12,12 @@ object LoGrep {
   private val newLine = UniformConfig.get("new_line").r
   private val ignoreLine = UniformConfig.get("ignore_line").r
 
+  // get config variable; if not default to false
+  private val RECORD_HISTORY: Boolean = UniformConfig.get("record_history") match {
+    case "true" => true
+    case _ => false
+  }
+
   // use hist configuration with a default mode of false
   private val useHist = UniformConfig.get("use_hist") match {
     case "true" => true
@@ -41,7 +47,10 @@ object LoGrep {
     val lines = new TextFile(filePath, newLine, ignoreLine)
       .getLines(func)
       .filter(_ != NoLine)
-    if (lines.size > 0) LastScan.put(filePath, lines.maxBy(_.date.getMillis).date.getMillis)
+    if (lines.size > 0 && RECORD_HISTORY)
+      LastScan.put(filePath, lines.maxBy(_.date.getMillis).date.getMillis)
+
+    // return lines
     lines
   }
 
