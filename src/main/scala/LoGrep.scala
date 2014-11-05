@@ -12,6 +12,12 @@ object LoGrep {
   private val newLine = UniformConfig.get("new_line").r
   private val ignoreLine = UniformConfig.get("ignore_line").r
 
+  // use hist configuration with a default mode of false
+  private val useHist = UniformConfig.get("use_hist") match {
+    case "true" => true
+    case _ => false
+  }
+
   def sortLines(a: Line, b: Line) = (a.date).compareTo(b.date) < 0
 
   /**
