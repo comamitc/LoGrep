@@ -1,1 +1,1 @@
-java -jar target/scala-2.11/logrep-assembly-0.1.2.jar $1 $2
+java -jar target/scala-2.11/logrep-assembly-0.1.3.jar $1 $2
