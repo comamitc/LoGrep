@@ -34,9 +34,8 @@ object LoGrep {
     val func = printMatchedString(term, LastScan.get(filePath)) _
     val lines = new TextFile(filePath, newLine, ignoreLine)
       .getLines(func)
-    println(lines.head.date.getMillis)
-    LastScan.put(filePath,
-      lines.maxBy(_.date.getMillis).date.getMillis)
+      .filter(_ != NoLine)
+    if (lines.size > 0) LastScan.put(filePath, lines.maxBy(_.date.getMillis).date.getMillis)
     lines
   }
 
@@ -53,7 +52,6 @@ object LoGrep {
       .foldLeft(List[Line]())((acc, file) => {
         func(file) ::: acc
       })
-      .filter(_ != NoLine)
       .sortWith(sortLines)
       .foreach(println)
   }
